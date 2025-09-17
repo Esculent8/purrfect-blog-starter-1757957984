@@ -2,4 +2,15 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
+# Visual Studio
+.vs/
+*.suo
+*.user
+
+# Binaries and build output
+[Bb]in/
+[Oo]bj/
+
+# Node.js
+node_modules/
+
