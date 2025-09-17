@@ -17,3 +17,6 @@ node_modules/
 # NuGet Packages
 packages/
 
+# Front-end assets
+Content/
+Scripts/
