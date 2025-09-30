@@ -1,0 +1,39 @@
+@model purrfect_blog_starter_1757957984.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<main>
+    <section class="row" aria-labelledby="aspnetTitle">
+        <h1 id="title">Register</h1>
+        <p class="lead"></p>
+    </section>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm p-4">
+                <h3 class="card-title mb-3 text-center">Create an Account</h3>
+                @using (Html.BeginForm("RegisterUser", "Account", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Enter username" })
+                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email">Email</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="password">Password</label>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                }
+            </div>
+        </div>
+    </div>
+</main>
