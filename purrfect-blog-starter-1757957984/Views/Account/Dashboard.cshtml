@@ -1,10 +1,60 @@
-﻿
+﻿@model IEnumerable<purrfect_blog_starter_1757957984.Models.PostListItemViewModel>
+@using purrfect_blog_starter_1757957984.Models
 @{
     ViewBag.Title = "Dashboard";
+    var sort = (string)ViewBag.Sort ?? "recent";
 }
 
-<h2>Welcome to the Dashboard</h2>
+<div class="d-flex align-items-center justify-content-between mt-3">
+    <h2 class="mb-0">Your Posts</h2>
+    <div class="d-flex" style="gap:10px;">
+        @using (Html.BeginForm("Dashboard", "Account", FormMethod.Get, new { @class = "d-flex" }))
+        {
+            <select name="sort" class="form-select" style="min-width:200px;" onchange="this.form.submit()">
+                <option value="recent" @(sort == "recent" ? "selected" : null)>Recent</option>
+                <option value="oldest" @(sort == "oldest" ? "selected" : null)>Oldest</option>
+                <option value="mostUpvoted" @(sort == "mostUpvoted" ? "selected" : null)>Most upvoted</option>
+                <option value="mostDownvoted" @(sort == "mostDownvoted" ? "selected" : null)>Most downvoted</option>
+            </select>
+        }
+        <a class="btn btn-warning" href="@Url.Action("CreatePost", "Posts")">Create New Post +</a>
+    </div>
+</div>
 
-<form action="/Account/Logout" method="post" style="margin-top:20px;">
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info mt-3">@TempData["Message"]</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info mt-3">You haven't created any posts yet.</div>
+}
+else
+{
+    <div class="list-group mt-3">
+        @foreach (var item in Model)
+        {
+            var post = item.Post;
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <h5 class="mb-1">@post.Title</h5>
+                    <div class="d-flex align-items-center" style="gap:8px;">
+                        <span class="badge bg-secondary">Score: @item.Score</span>
+                        @* Voting disabled here as you've already voted or may want to show-only on your own posts. Enable if desired similar to Posts page *@
+                    </div>
+                </div>
+                <small class="text-muted">@post.CreatedAt.ToLocalTime().ToString("g")</small>
+                @if (!string.IsNullOrWhiteSpace(post.Category))
+                {
+                    <div><small class="badge bg-warning text-dark" style="margin-right:8px;">@post.Category</small></div>
+                }
+                <p class="mb-1 mt-2" style="white-space:pre-wrap;">@post.Content</p>
+            </div>
+        }
+    </div>
+}
+
+<form action="/Account/Logout" method="post" class="mt-4">
     <button type="submit" class="btn btn-danger">Sign Out</button>
 </form>

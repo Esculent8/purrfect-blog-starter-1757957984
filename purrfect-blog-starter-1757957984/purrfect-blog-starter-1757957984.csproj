@@ -129,6 +129,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -140,11 +141,23 @@
     <Compile Include="Migrations\202509270701368_UpdateUserModel.Designer.cs">
       <DependentUpon>202509270701368_UpdateUserModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202510010512280_AddVotes.cs" />
+    <Compile Include="Migrations\202510010512280_AddVotes.Designer.cs">
+      <DependentUpon>202510010512280_AddVotes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202510010749395_SeedTestPosts.cs" />
+    <Compile Include="Migrations\202510010749395_SeedTestPosts.Designer.cs">
+      <DependentUpon>202510010749395_SeedTestPosts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\PostCreateViewModel.cs" />
+    <Compile Include="Models\Post.cs" />
+    <Compile Include="Models\PostListItemViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Vote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -200,9 +213,12 @@
     <Content Include="Views\Account\Dashboard.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Posts\Index.cshtml" />
+    <Content Include="Views\Posts\CreatePost.cshtml" />
+    <Content Include="Views\Posts\PostListItemViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PostsViews\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -237,6 +253,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202509270701368_UpdateUserModel.resx">
       <DependentUpon>202509270701368_UpdateUserModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510010512280_AddVotes.resx">
+      <DependentUpon>202510010512280_AddVotes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510010749395_SeedTestPosts.resx">
+      <DependentUpon>202510010749395_SeedTestPosts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

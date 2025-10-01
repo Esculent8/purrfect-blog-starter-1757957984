@@ -1,0 +1,53 @@
+﻿@model purrfect_blog_starter_1757957984.Models.PostCreateViewModel
+@{
+    ViewBag.Title = "Create Post";
+}
+
+<main>
+    <section class="row" aria-labelledby="createPostTitle">
+        <h1 id="createPostTitle">Create Post</h1>
+    </section>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4">
+                @using (Html.BeginForm("CreatePost", "Posts", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group mb-3">
+                        <label for="Title">Title</label>
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter a title" })
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="Content">Content</label>
+                        @Html.TextAreaFor(
+                                 m => m.Content,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     placeholder = "Write your post content...",
+                                     rows = "12",
+                                     style = "min-height: 240px;"
+                                 })
+                        @Html.ValidationMessageFor(m => m.Content, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="Category">Category</label>
+                        @Html.TextBoxFor(m => m.Category, new { @class = "form-control", placeholder = "Enter a category (optional)" })
+                        @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <a class="btn btn-secondary" href="@Url.Action("Index", "Posts")">Cancel</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</main>

@@ -104,9 +104,42 @@ namespace purrfect_blog_starter_1757957984.Controllers
         }
 
         [Authorize]
-        public ActionResult Dashboard()
+        public ActionResult Dashboard(string sort = "recent")
         {
-            return View();
+            var username = User?.Identity?.Name;
+            using (var db = new ApplicationDbContext())
+            {
+                    var query =
+                    from p in db.Posts.Where(p => p.AuthorUsername == username)
+                    join v in db.Votes on p.Id equals v.PostId into pv
+                    select new PostListItemViewModel
+                    {
+                        Post = p,
+                        Score = pv.Select(x => (int?)x.Value).Sum() ?? 0,
+                        CurrentUserVote = pv.Where(x => x.VoterUsername == username).Select(x => x.Value).FirstOrDefault()
+                    };
+
+                switch ((sort ?? "recent").ToLowerInvariant())
+                {
+                    case "oldest":
+                        query = query.OrderBy(x => x.Post.CreatedAt);
+                        break;
+                    case "mostupvoted":
+                        query = query.OrderByDescending(x => x.Score);
+                        break;
+                    case "mostdownvoted":
+                        query = query.OrderBy(x => x.Score);
+                        break;
+                    default:
+                        query = query.OrderByDescending(x => x.Post.CreatedAt);
+                        sort = "recent";
+                        break;
+                }
+
+                var items = query.ToList();
+                ViewBag.Sort = sort;
+                return View(items);
+            }
         }
 
         private string HashPassword(string password)
