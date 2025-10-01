@@ -1,7 +1,73 @@
-﻿
+﻿@model IEnumerable<purrfect_blog_starter_1757957984.Models.PostListItemViewModel>
+@using purrfect_blog_starter_1757957984.Models
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Posts";
+    var sort = (string)ViewBag.Sort ?? "recent";
 }
 
-<h2>Index</h2>
+<div class="d-flex align-items-center justify-content-between mt-3">
+    <h2 class="mb-0">Global Posts</h2>
+    <div class="d-flex" style="gap:10px;">
+        @using (Html.BeginForm("Index", "Posts", FormMethod.Get, new { @class = "d-flex" }))
+        {
+            <select name="sort" class="form-select" style="min-width:200px;" onchange="this.form.submit()">
+                <option value="recent" @(sort == "recent" ? "selected" : null)>Recent</option>
+                <option value="oldest" @(sort == "oldest" ? "selected" : null)>Oldest</option>
+                <option value="mostUpvoted" @(sort == "mostUpvoted" ? "selected" : null)>Most upvoted</option>
+                <option value="mostDownvoted" @(sort == "mostDownvoted" ? "selected" : null)>Most downvoted</option>
+            </select>
+        }
+        @if (User?.Identity?.IsAuthenticated == true)
+        {
+            <a class="btn btn-warning" href="@Url.Action("CreatePost", "Posts")">Create New Post +</a>
+        }
+    </div>
+</div>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info mt-3">@TempData["Message"]</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info mt-3">No posts yet.</div>
+}
+else
+{
+    <div class="list-group mt-3">
+        @foreach (var item in Model)
+        {
+            var post = item.Post;
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <h5 class="mb-1">@post.Title</h5>
+                    <div class="d-flex align-items-center" style="gap:8px;">
+                        <span class="badge bg-secondary">Score: @item.Score</span>
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            using (Html.BeginForm("Upvote", "Posts", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", post.Id)
+                                <button type="submit" class="btn btn-sm @(item.CurrentUserVote == 1 ? "btn-success" : "btn-outline-success")">▲</button>
+                            }
+                            using (Html.BeginForm("Downvote", "Posts", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", post.Id)
+                                <button type="submit" class="btn btn-sm @(item.CurrentUserVote == -1 ? "btn-danger" : "btn-outline-danger")">▼</button>
+                            }
+                        }
+                    </div>
+                </div>
+                <small class="text-muted">@post.CreatedAt.ToLocalTime().ToString("g") by @post.AuthorUsername</small>
+                @if (!string.IsNullOrWhiteSpace(post.Category))
+                {
+                    <div><small class="badge bg-warning text-dark" style="margin-right:8px;">@post.Category</small></div>
+                }
+                <p class="mb-1 mt-2" style="white-space:pre-wrap;">@post.Content</p>
+            </div>
+        }
+    </div>
+}
