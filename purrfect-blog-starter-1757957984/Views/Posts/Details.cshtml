@@ -1,0 +1,25 @@
+﻿@model purrfect_blog_starter_1757957984.Models.Post
+@{
+    @* Post details page: shows full title, content, date, category *@
+    ViewBag.Title = Model?.Title ?? "Post";
+}
+
+<div class="mt-3 d-flex align-items-center justify-content-between">
+    <h2 class="mb-0 post-title-text">@Model.Title</h2>
+    <a class="btn btn-secondary" href="@Url.Action("Index", "Posts")">Back to Posts</a>
+</div>
+
+@* Created date and optional category *@
+<div class="text-muted mt-2">
+    <small>@Model.CreatedAt.ToLocalTime().ToString("f")</small>
+    @if (!string.IsNullOrWhiteSpace(Model.Category))
+    {
+        <span class="badge bg-warning text-dark" style="margin-left:8px;">@Model.Category</span>
+    }
+</div>
+
+<hr />
+
+<div style="white-space: pre-wrap;">
+    @Model.Content
+</div>

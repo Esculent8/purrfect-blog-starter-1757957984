@@ -215,6 +215,7 @@
     <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Posts\CreatePost.cshtml" />
     <Content Include="Views\Posts\PostListItemViewModel.cshtml" />
+    <Content Include="Views\Posts\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -8,17 +8,83 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+    @* Resolve user identity in a null-safe way so layout never throws on unauthenticated/error pages *@
+    @{
+        //Never let this throw. [This should be updated for null checks before any production use.]
+        bool isAuthed = false;
+        string username = "Account";
+        try
+        {
+            var ctx = System.Web.HttpContext.Current;
+            var principal = ctx != null ? ctx.User : null;
+            var identity = principal != null ? principal.Identity : null;
+
+            isAuthed = identity != null && identity.IsAuthenticated;
+            if (isAuthed && !string.IsNullOrWhiteSpace(identity.Name))
+            {
+                username = identity.Name;
+            }
+        }
+        catch
+        {
+            isAuthed = false;
+            username = "Account";
+        }
+    }
+
+
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container">
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+            @* Mobile navbar toggler (collapses primary nav on small screens) *@
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="mainNavbar" class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                @* Left side of nav: website link and navigation buttons *@
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("PURRFECTBLOG", "Index", "Home", new { area = "" }, new { @class = "nav-link fw-bold", style = "font-size: 18px;"})</li>
-                    <li>@Html.ActionLink("Posts", "Index", "Posts", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Dashboard", "Dashboard", "Account", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">
+                        @Html.ActionLink("PURRFECTBLOG", "Index", "Home", new { area = "" }, new { @class = "nav-link fw-bold brand-link", style = "font-size: 18px;" })
+                    </li>
+                    <li class="nav-item">@Html.ActionLink("Posts", "Index", "Posts", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Dashboard", "Dashboard", "Account", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
+
+                @* Right side of nav: If authenticated, show username dropdown with Sign out; else, Sign in/Register *@
+                @if (isAuthed)
+                {
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            @* Username toggles a Bootstrap dropdown for signing out*@
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @username
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    @* Logout is POST with anti-forgery token *@
+                                    @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { @class = "m-0 p-0" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-item text-danger w-100 text-start">Sign out</button>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">@Html.ActionLink("Sign in", "Login", "Account", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Register", "Register", "Account", null, new { @class = "nav-link" })</li>
+                    </ul>
+                }
             </div>
         </div>
     </nav>
+
+    @*Main page content placeholder, each view renders here*@
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -27,8 +93,8 @@
         </footer>
     </div>
 
+    @*jQuery first, then Bootstrap (bundle includes Popper for dropdowns) *@
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <script src="@Url.Content("~/Scripts/bootstrap.bundle.min.js")"></script>
     @RenderSection("scripts", required: false)
-</body>
 </html>

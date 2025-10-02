@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using purrfect_blog_starter_1757957984.Models; // Add this line for the LoginViewModel
+using purrfect_blog_starter_1757957984.Models;
 
 namespace purrfect_blog_starter_1757957984.Controllers
 {
@@ -11,7 +11,14 @@ namespace purrfect_blog_starter_1757957984.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            using (var db = new ApplicationDbContext())
+            {
+                var recent = db.Posts
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Take(3)
+                    .ToList();
+                return View(recent);
+            }
         }
 
         public ActionResult About()

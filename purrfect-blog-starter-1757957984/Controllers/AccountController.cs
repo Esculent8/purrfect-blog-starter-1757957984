@@ -9,24 +9,27 @@ using System.Text;
 
 namespace purrfect_blog_starter_1757957984.Controllers
 {
+    // Handles registration, login/logout, and the user dashboard
     public class AccountController : Controller
     {
-
+        // Register new user (POST). Validates model, prevents duplicates, hashes password
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RegisterUser(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                // Return validation messages to the registration page
                 return View("Register", model);
             }
 
             using (var db = new ApplicationDbContext())
             {
+                // Normalize inputs.
                 model.Username = model.Username?.Trim();
                 model.Email = model.Email?.Trim();
 
-                // Check if username and email already exists
+                // Enforce unique username and email
                 bool usernameExists = db.Users.Any(u => u.Username == model.Username);
                 bool emailExists = db.Users.Any(u => u.Email == model.Email);
 
@@ -42,13 +45,14 @@ namespace purrfect_blog_starter_1757957984.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    // Dup errors or other validation failures
                     return View("Register", model);
                 }
 
-                // Hash the password
+                // Hash password with SHA256 (stored as Base64)
                 string hashedPassword = HashPassword(model.Password);
 
-                // Save the new user
+                // Persist new user
                 var newUser = new User
                 {
                     Username = model.Username,
@@ -58,12 +62,13 @@ namespace purrfect_blog_starter_1757957984.Controllers
                 db.Users.Add(newUser);
                 db.SaveChanges();
 
-                // After successful registration
-				TempData["SuccessMessage"] = "Registration successful!";
-				return RedirectToAction("Login", "Account");
+                // Redirect to Login with success message
+                TempData["SuccessMessage"] = "Registration successful!";
+                return RedirectToAction("Login", "Account");
             }
         }
 
+        // Login (POST). Validates credentials and sets the auth cookie
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LoginUser(LoginViewModel model)
@@ -75,41 +80,52 @@ namespace purrfect_blog_starter_1757957984.Controllers
             using (var db = new ApplicationDbContext())
             {
                 string hashedPassword = HashPassword(model.Password);
+
+                // Verify username+hash match
                 var user = db.Users.FirstOrDefault(u => u.Username == model.Username && u.PasswordHash == hashedPassword);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Invalid username or password.");
                     return View("~/Views/Account/Login.cshtml", model);
                 }
-                // Set session or authentication cookie
+
+                // Persist sign-in using FormsAuthentication cookie.
                 System.Web.Security.FormsAuthentication.SetAuthCookie(user.Username, true);
                 return RedirectToAction("Dashboard");
             }
         }
+
+        // Logout (POST) clears auth cookie and returns to login page
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Logout()
         {
             System.Web.Security.FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Account");
         }
 
+        // Render registration page
         public ActionResult Register()
         {
             return View();
         }
 
+        // Render login page
         [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
+        // User dashboard: lists only the current user's posts with score, supports sorting
         [Authorize]
         public ActionResult Dashboard(string sort = "recent")
         {
             var username = User?.Identity?.Name;
             using (var db = new ApplicationDbContext())
             {
-                    var query =
+                // Left join votes to compute score and user's vote per post
+                var query =
                     from p in db.Posts.Where(p => p.AuthorUsername == username)
                     join v in db.Votes on p.Id equals v.PostId into pv
                     select new PostListItemViewModel
@@ -119,6 +135,7 @@ namespace purrfect_blog_starter_1757957984.Controllers
                         CurrentUserVote = pv.Where(x => x.VoterUsername == username).Select(x => x.Value).FirstOrDefault()
                     };
 
+                // Apply sorting
                 switch ((sort ?? "recent").ToLowerInvariant())
                 {
                     case "oldest":
@@ -137,11 +154,12 @@ namespace purrfect_blog_starter_1757957984.Controllers
                 }
 
                 var items = query.ToList();
-                ViewBag.Sort = sort;
+                ViewBag.Sort = sort; // Apply chosen sort to the view
                 return View(items);
             }
         }
 
+        // SHA256 hashing helper for storing password hashes
         private string HashPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
