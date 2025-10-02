@@ -13,6 +13,14 @@ namespace purrfect_blog_starter_1757957984
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //Route for individual post pages: /post/{id}
+            routes.MapRoute(
+                name: "PostDetails",
+                url: "post/{id}",
+                defaults: new { controller = "Posts", action = "Details" },
+                constraints: new { id = @"\d+" }
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

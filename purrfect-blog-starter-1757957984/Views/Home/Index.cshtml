@@ -1,13 +1,14 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<purrfect_blog_starter_1757957984.Models.Post>
+@{
+    ViewBag.Title = "Home";
 }
 
-@model purrfect_blog_starter_1757957984.Models.LoginViewModel
 <main>
     <section class="row" aria-labelledby="aspnetTitle">
         <p class="lead"></p>
     </section>
 
+    @* Quick access card to sign in/register *@
     <div class="row justify-content-center mt-4">
         <div class="col-md-8">
             <div class="card shadow-sm p-4">
@@ -15,9 +16,40 @@
 
                 <a href="/Account/Login" class="btn w-15 mb-3">Sign in</a>
                 <a href="/Account/Register" class="btn w-15 mb-3">Register</a>
-
-
             </div>
         </div>
     </div>
+
+    <h3 class="mt-4">Latest Posts</h3>
+
+    @* Empty state *@
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info mt-3">No posts yet. Check back soon!</div>
+    }
+    else
+    {
+        @* List previews (title, date, category, truncated content) *@
+        <div class="list-group mt-3">
+            @foreach (var post in Model)
+            {
+                @* Build a short preview of the content *@
+                var preview = post.Content ?? "";
+                if (preview.Length > 220) { preview = preview.Substring(0, 220) + "..."; }
+
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <h5 class="mb-1">@post.Title</h5>
+                        <small class="text-muted">@post.CreatedAt.ToLocalTime().ToString("g")</small>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(post.Category))
+                    {
+                        <small class="badge bg-warning text-dark" style="margin-right:8px;">@post.Category</small>
+                    }
+                    <p class="mb-2 mt-2" style="white-space:pre-wrap;">@preview</p>
+                    <a class="read-more-link" href='@Url.RouteUrl("PostDetails", new { id = post.Id })'>Read more &gt;</a>
+                </div>
+            }
+        </div>
+    }
 </main>
