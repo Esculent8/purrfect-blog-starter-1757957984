@@ -2,12 +2,15 @@
 @using purrfect_blog_starter_1757957984.Models
 @{
     ViewBag.Title = "Posts";
+    // Current sort mode passed via ViewBag from controller (recent | oldest | mostUpvoted | mostDownvoted)
     var sort = (string)ViewBag.Sort ?? "recent";
 }
 
+@* Page header with title, sort dropdown, and Create button for authenticated users *@
 <div class="d-flex align-items-center justify-content-between mt-3">
     <h2 class="mb-0">Global Posts</h2>
     <div class="d-flex" style="gap:10px;">
+        @* Sort form: GET to preserve bookmarkable URLs *@
         @using (Html.BeginForm("Index", "Posts", FormMethod.Get, new { @class = "d-flex" }))
         {
             <select name="sort" class="form-select" style="min-width:200px;" onchange="this.form.submit()">
@@ -17,6 +20,7 @@
                 <option value="mostDownvoted" @(sort == "mostDownvoted" ? "selected" : null)>Most downvoted</option>
             </select>
         }
+        @* Quick access to create a new post (only shown when signed in) *@
         @if (User?.Identity?.IsAuthenticated == true)
         {
             <a class="btn btn-warning" href="@Url.Action("CreatePost", "Posts")">Create New Post +</a>
@@ -24,34 +28,45 @@
     </div>
 </div>
 
+@* Optional flash message area (TempData messages from create/edit/delete actions) *@
 @if (TempData["Message"] != null)
 {
     <div class="alert alert-info mt-3">@TempData["Message"]</div>
 }
 
+@* Empty-state messaging when there are no posts *@
 @if (Model == null || !Model.Any())
 {
     <div class="alert alert-info mt-3">No posts yet.</div>
 }
 else
 {
+    @* List of posts with title link, vote controls, metadata and preview *@
     <div class="list-group mt-3">
         @foreach (var item in Model)
         {
             var post = item.Post;
             <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between align-items-center">
-                    <h5 class="mb-1">@post.Title</h5>
+                    @* Title links to individual post details page *@
+                    <h5 class="mb-1">
+                        <a href="@Url.RouteUrl("PostDetails", new { id = post.Id })" class="text-decoration-none ">@post.Title</a>
+                    </h5>
+
+                    @* Score badge and vote buttons (▲/▼); toggle states reflect current user's vote *@
                     <div class="d-flex align-items-center" style="gap:8px;">
                         <span class="badge bg-secondary">Score: @item.Score</span>
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
+                            @* Upvote form (POST + Anti-Forgery) *@
                             using (Html.BeginForm("Upvote", "Posts", FormMethod.Post, new { @class = "d-inline" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("id", post.Id)
                                 <button type="submit" class="btn btn-sm @(item.CurrentUserVote == 1 ? "btn-success" : "btn-outline-success")">▲</button>
                             }
+
+                            @* Downvote form (POST + Anti-Forgery) *@
                             using (Html.BeginForm("Downvote", "Posts", FormMethod.Post, new { @class = "d-inline" }))
                             {
                                 @Html.AntiForgeryToken()
@@ -61,12 +76,23 @@ else
                         }
                     </div>
                 </div>
+
+                @* Timestamp and author *@
                 <small class="text-muted">@post.CreatedAt.ToLocalTime().ToString("g") by @post.AuthorUsername</small>
+
+                @* Optional category badge *@
                 @if (!string.IsNullOrWhiteSpace(post.Category))
                 {
                     <div><small class="badge bg-warning text-dark" style="margin-right:8px;">@post.Category</small></div>
                 }
+
+                @* Content preview (full content shown; truncate if desired) *@
                 <p class="mb-1 mt-2" style="white-space:pre-wrap;">@post.Content</p>
+
+                @* Link to the details page *@
+                <div>
+                    <a class="read-more-link" href="@Url.RouteUrl("PostDetails", new { id = post.Id })">Read more &gt;</a>
+                </div>
             </div>
         }
     </div>
