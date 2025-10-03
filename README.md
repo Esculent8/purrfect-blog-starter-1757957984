@@ -1,19 +1,21 @@
+## General Information
+
 PURRFECT BLOG: This application allows users to become authors by creating blog posts and posting them online for others to see. Posts can be upvoted or downvoted adding to the post's voting score, using filters one can sort through all global posts from the most popular to the least popular.
 
-🌐 Demo
+## 🌐 Demo
 
-[Your Demo Link Here](http://replace-with-your-link.com)
+[Demo Link](http://replace-with-your-link.com)
 
 Demo Credentials:
 - Username 1: siamese
 - Password 1: Password1!
-
+----------------------------------------
 - Username 2: russian blue
 - Password 2: Password2!
-
+----------------------------------------
 - Username 3: mainecoon
 - Password 3: Password3!
-
+----------------------------------------
 ## 📖 About this Software
 
 Provide a comprehensive explanation of your software here. Dive into its core functionalities, why you opted to create it, its target users, and its value proposition.
@@ -29,22 +31,11 @@ Provide a comprehensive explanation of your software here. Dive into its core fu
 
 To give you a visual overview of the application, here are some screenshots:
 
-### [Feature or Page Name]
-![Description of Image](http://link-to-your-image.com/image1.png)
+### [Dashboard]
+![Your personal dashboard page showing your created posts](http://link-to-your-image.com/image1.png)
 
-### [Another Feature or Page Name]
-![Description of Image](http://link-to-your-image.com/image2.png)
-
-Add more screenshots as needed. Ensure to replace placeholders with appropriate links and descriptions.
-
-## ⚠️ Warning
-
-**Changing the repository name is NOT allowed.** Renaming this repository can cause issues with the peer review feature integrated into this template. 
-
-If you're planning to present this project to potential employers or external parties:
-
-1. Ensure that all functionalities work as expected.
-2. **Remove this warning section** to maintain a clean and professional look.
+### [Home Screen]
+![PURRFECT BLOG Home Screen](http://link-to-your-image.com/image2.png)
 
 ## ✅ Best Practices to Follow
 
