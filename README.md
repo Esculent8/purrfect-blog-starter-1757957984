@@ -1,14 +1,18 @@
-# GenericTemplate
+PURRFECT BLOG: This application allows users to become authors by creating blog posts and posting them online for others to see. Posts can be upvoted or downvoted adding to the post's voting score, using filters one can sort through all global posts from the most popular to the least popular.
 
-**[Insert a brief description of your application here. Describe its purpose, functionality, etc.]**
-
-## 🌐 Demo
+🌐 Demo
 
 [Your Demo Link Here](http://replace-with-your-link.com)
 
-**Demo Credentials (If applicable):**
-- **Username:** ReplaceThisWithUsername
-- **Password:** ReplaceThisWithPassword
+Demo Credentials:
+- Username 1: siamese
+- Password 1: Password1!
+
+- Username 2: russian blue
+- Password 2: Password2!
+
+- Username 3: mainecoon
+- Password 3: Password3!
 
 ## 📖 About this Software
 
@@ -16,9 +20,10 @@ Provide a comprehensive explanation of your software here. Dive into its core fu
 
 ### Features:
 
-1. **Feature 1:** Brief description.
-2. **Feature 2:** Brief description.
-3. **...:** Continue listing out the core features of your application.
+1. Create Blog Posts: This web application allows users to become authors by creating blog posts and posting them online for others to see.
+2. Upvote/Downvote Feature: Signed in users are able to upvote/downvote other posts, including their own.
+3. Global Posts Page: On this page users are able to see all posts posted by anyone using the site.
+4. Dashboard: This page allows the user to see all of their posted blog posts. Clicking on an idvididual post takes them to a page where they can edit or delete their posts.
 
 ## 🖼️ Screenshots
 
