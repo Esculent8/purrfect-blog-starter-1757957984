@@ -21,6 +21,14 @@ namespace purrfect_blog_starter_1757957984
                 constraints: new { id = @"\d+" }
             );
 
+            // Route for editing a post: /EditPost/{id}
+            routes.MapRoute(
+                name: "EditPost",
+                url: "EditPost/{id}",
+                defaults: new { controller = "Posts", action = "EditPost" },
+                constraints: new { id = @"\d+" }
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
