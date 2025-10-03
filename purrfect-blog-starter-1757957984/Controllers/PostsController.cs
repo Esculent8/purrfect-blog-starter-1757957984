@@ -174,7 +174,13 @@ namespace purrfect_blog_starter_1757957984.Controllers
             using (var db = new ApplicationDbContext())
             {
                 var post = db.Posts.FirstOrDefault(p => p.Id == id);
-                if (post == null) return HttpNotFound();
+                if (post == null)
+                {
+                    // Return a friendly page when the post does not exist
+                    Response.StatusCode = 404;
+                    Response.TrySkipIisCustomErrors = true;
+                    return View("PostDeleted");
+                }
                 return View(post);
             }
         }
@@ -261,25 +267,38 @@ namespace purrfect_blog_starter_1757957984.Controllers
             using (var db = new ApplicationDbContext())
             {
                 var post = db.Posts.FirstOrDefault(p => p.Id == id);
-                if (post == null) return HttpNotFound();
+                if (post == null)
+                {
+                    // Treat as already deleted
+                    TempData["Message"] = "Post not found or already deleted.";
+                    return RedirectToAction("Index");
+                }
 
                 if (!string.Equals(post.AuthorUsername, username, StringComparison.OrdinalIgnoreCase))
                 {
                     return new HttpUnauthorizedResult();
                 }
 
-                // Remove related votes first (in case cascade delete isn't configured)
-                var votes = db.Votes.Where(v => v.PostId == id).ToList();
-                if (votes.Any())
+                try
                 {
-                    db.Votes.RemoveRange(votes);
+                    // Remove related votes via SQL to avoid EF concurrency on child deletes
+                    db.Database.ExecuteSqlCommand("DELETE FROM [Votes] WHERE [PostId] = @p0", id);
+
+                    // Now remove the post
+                    db.Posts.Remove(post);
+
+                    db.SaveChanges();
+
+                    TempData["Message"] = "Post deleted.";
+                    return RedirectToAction("Index");
                 }
-
-                db.Posts.Remove(post);
-                db.SaveChanges();
-
-                TempData["Message"] = "Post deleted.";
-                return RedirectToAction("Index");
+                catch (System.Data.Entity.Core.OptimisticConcurrencyException)
+                {
+                    // If another request already deleted the post (or cascade already removed rows),
+                    // just show a friendly message and continue.
+                    TempData["Message"] = "Post was already deleted.";
+                    return RedirectToAction("Index");
+                }
             }
         }
     }
