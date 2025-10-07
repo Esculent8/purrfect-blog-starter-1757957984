@@ -56,7 +56,7 @@ To give you a visual overview of the application, here are some screenshots:
 ![Personal dashboard showing your created posts](docs/screenshots/Dashboard.png)
 
 ### [Home Screen]
-![Purrfect Blog Home Screen](docs/screenshots/Home.png)
+![Purrfect Blog Home Screen](docs/screenshots/Homescreen.png)
 
 ### [Login_Screen]
 ![Login page](docs/screenshots/Login.png)
