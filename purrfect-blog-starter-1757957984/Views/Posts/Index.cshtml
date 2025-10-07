@@ -88,11 +88,6 @@ else
 
                 @* Content preview (full content shown; truncate if desired) *@
                 <p class="mb-1 mt-2" style="white-space:pre-wrap;">@post.Content</p>
-
-                @* Link to the details page *@
-                <div>
-                    <a class="read-more-link" href="@Url.RouteUrl("PostDetails", new { id = post.Id })">Read more &gt;</a>
-                </div>
             </div>
         }
     </div>
