@@ -58,7 +58,7 @@ To give you a visual overview of the application, here are some screenshots:
 ### [Home Screen]
 ![Purrfect Blog Home Screen](docs/screenshots/Homescreen.png)
 
-### [Login_Screen]
+### [Login Screen]
 ![Login page](docs/screenshots/Login.png)
 
 ### [Posts Screen]
