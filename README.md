@@ -53,7 +53,16 @@ This project can serve as:
 To give you a visual overview of the application, here are some screenshots:
 
 ### [Dashboard]
-![Your personal dashboard page showing your created posts](http://link-to-your-image.com/image1.png)
+![Personal dashboard showing your created posts](docs/screenshots/Dashboard.png)
 
 ### [Home Screen]
-![PURRFECT BLOG Home Screen](http://link-to-your-image.com/image2.png)
+![Purrfect Blog Home Screen](http://link-to-your-image.com/image2.png)
+
+### [Login_Screen]
+![Login page](http://link-to-your-image.com/image2.png)
+
+### [Posts Screen]
+![Posts screen shows screenshots of all users](http://link-to-your-image.com/image2.png)
+
+### [Register Screen]
+![Register page](http://link-to-your-image.com/image2.png)
