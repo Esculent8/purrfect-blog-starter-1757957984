@@ -56,13 +56,13 @@ To give you a visual overview of the application, here are some screenshots:
 ![Personal dashboard showing your created posts](docs/screenshots/Dashboard.png)
 
 ### [Home Screen]
-![Purrfect Blog Home Screen](http://link-to-your-image.com/image2.png)
+![Purrfect Blog Home Screen](docs/screenshots/Home.png)
 
 ### [Login_Screen]
-![Login page](http://link-to-your-image.com/image2.png)
+![Login page](docs/screenshots/Login.png)
 
 ### [Posts Screen]
-![Posts screen shows screenshots of all users](http://link-to-your-image.com/image2.png)
+![Posts screen shows screenshots of all users](docs/screenshots/Posts.png)
 
 ### [Register Screen]
-![Register page](http://link-to-your-image.com/image2.png)
+![Register page](docs/screenshots/Register.png)
