@@ -4,7 +4,7 @@ Purrfect Blog is a simple, welcoming space where people can sign up, write posts
 
 ## 🌐 Demo
 
-[Demo Link](http://replace-with-your-link.com)
+[Demo Link](https://github.com/user-attachments/assets/6bf79926-a11d-4606-be6f-36d24a2108cc)
 
 Demo Credentials:
 - Username 1: siamese
